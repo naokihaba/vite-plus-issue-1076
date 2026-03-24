@@ -1,0 +1,50 @@
+packages:
+  - apps/*
+  - packages/*
+
+allowBuilds:
+  esbuild: true # downloads platform-specific binary
+  lefthook: true # Use lefthook
+  sharp: true # compiles native modules
+  workerd: true # for cloudflare related packages
+
+blockExoticSubdeps: true
+
+catalogMode: strict
+cleanupUnusedCatalogs: true
+
+minimumReleaseAge: 10080 # 7days
+minimumReleaseAgeExclude:
+  - '@typescript/*'
+  - '@cloudflare/*'
+  - workerd
+  - wrangler
+  - miniflare
+  - '@voidzero-dev/*'
+  - '@oxc-project/*'
+  - vite
+  - rolldown
+  - '@rolldown/*'
+  - '@oxlint/*'
+  - '@oxlint-tsgolint/*'
+  - '@oxfmt/*'
+  - tinyexec
+  - tailwindcss
+  - '@tailwindcss/*'
+
+# For `vite-plus`
+overrides:
+  vite: 'catalog:devtool'
+  vitest: 'catalog:devtool'
+peerDependencyRules:
+  allowAny:
+    - vite
+    - vitest
+  allowedVersions:
+    vite: '*'
+    vitest: '*'
+
+strictDepBuilds: true
+trustPolicy: no-downgrade
+trustPolicyExclude:
+  - semver@6.3.1
