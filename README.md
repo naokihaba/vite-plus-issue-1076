@@ -53,10 +53,6 @@ Node.js process            │  Cloudflare Worker process
 clearCollectorContext ✅   │  initSuite → runner = undefined → CRASH
 ```
 
-The fix is to remove the `id === "vitest"` interception in `patchVitestCoreResolver()` so that the bare specifier falls through to standard vitest resolution, the same approach used in PR #1110 for `@vitest/browser/context`.
-
-**Relevant file in vite-plus:** `packages/test/build.ts` → `patchVitestCoreResolver()`
-
 ## Environment
 
 | Package | Version |
