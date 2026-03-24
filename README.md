@@ -46,11 +46,29 @@ vp test
 
 `clearCollectorContext()` is called on the Node.js-side runner instance (setting `runner = testRunner`), but the Worker-side instance never receives this call — it runs in a separate process where `globalThis` is not shared. When the test file's `describe()` calls `initSuite()`, `runner` is still `undefined`.
 
-```
-Node.js process            │  Cloudflare Worker process
-─────────────────────────  │  ─────────────────────────────────────
-@vitest/runner (std)       │  @vitest/runner (vite-plus-test bundled)
-clearCollectorContext ✅   │  initSuite → runner = undefined → CRASH
+```mermaid
+flowchart TD
+    subgraph nodejs["Node.js process (pool)"]
+        VCR["VitestCoreResolver"]
+        STD["@vitest/runner (standard)\ninstance A"]
+        CCC["clearCollectorContext\nrunner = testRunner ✅"]
+
+        VCR -->|"vitest/ @vitest/ → this.resolve"| STD
+        STD --> CCC
+    end
+
+    subgraph worker["Cloudflare Worker process (Durable Object)"]
+        VCR2["VitestCoreResolver"]
+        BUNDLED["@vitest/runner (vite-plus-test bundled)\ninstance B — never initialized"]
+        TEST["test/index.test.ts\ndescribe()"]
+        CRASH["initSuite\nrunner = undefined → CRASH 💥"]
+
+        VCR2 -->|"vitest → resolve(distDir, 'index.js')"| BUNDLED
+        TEST -->|import vitest| VCR2
+        BUNDLED --> CRASH
+    end
+
+    CCC -.->|"separate process\nglobalThis not shared"| CRASH
 ```
 
 ## Environment
