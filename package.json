@@ -1,19 +1,44 @@
 {
-  "name": "vitest-pool-workers-viteplus-sample",
-  "version": "0.0.1",
+  "name": "web",
+  "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
+    "dev": "vp dev",
+    "build": "vp build",
+    "preview": "vp preview",
+    "deploy": "vp build && wrangler deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "check": "vp check --fix",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "validate": "vp check --fix && vitest run",
+    "knip": "knip --fix",
+    "review:duplicate": "similarity-ts src/"
+  },
+  "dependencies": {
+    "@hono/react-renderer": "catalog:web",
+    "@tanstack/react-query": "catalog:web",
+    "@tanstack/react-router": "catalog:web",
+    "hono": "catalog:web",
+    "react": "catalog:web",
+    "react-dom": "catalog:web",
+    "tailwindcss": "catalog:web"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.13.0",
-    "@cloudflare/workers-types": "^4.20250310.0",
-    "typescript": "^5.8.2",
-    "vitest": "^4.1.0",
-    "wrangler": "^4.0.0"
+    "@cloudflare/vite-plugin": "catalog:web",
+    "@cloudflare/vitest-pool-workers": "catalog:web",
+    "@tailwindcss/vite": "catalog:web",
+    "@tanstack/eslint-plugin-query": "catalog:devtool",
+    "@tanstack/eslint-plugin-router": "catalog:devtool",
+    "@tanstack/router-plugin": "catalog:web",
+    "@types/react": "catalog:web",
+    "@types/react-dom": "catalog:web",
+    "typescript": "catalog:devtool",
+    "vite": "catalog:devtool",
+    "vite-plus": "catalog:devtool",
+    "vite-ssr-components": "catalog:web",
+    "vitest": "catalog:devtool",
+    "wrangler": "catalog:devtool"
   },
   "packageManager": "pnpm@10.32.1"
 }
